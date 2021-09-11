@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import Error from './Error';
+import shortid from 'shortid';
+import PropTypes from 'prop-types';
 
 
-const Form = () => {
+const Form = ({saveExpense, saveCreateExpense}) => {
 
 const [ expenseName, saveExpenseName ] = useState('');
 const [ expenseAmount, saveExpenseAmount ] = useState(0);
 const [ error, saveError ] = useState(false);
+
+
 
 // Add expense by user
 const addExpense = (e) => {
@@ -21,10 +25,20 @@ const addExpense = (e) => {
     saveError(false)
 
     // construct expense
+    const expense = {
+        expenseName,
+        expenseAmount,
+        id: shortid.generate() // npm install shortid - import shortid from 'shortid';
+    }
+    
 
     // expense to ppal component
+    saveExpense(expense);
+    saveCreateExpense(true);
 
     // reset form
+    saveExpenseAmount(0);
+    saveExpenseName('');
 }
  
     return ( 
@@ -65,6 +79,11 @@ const addExpense = (e) => {
                 />
         </form>
      );
+}
+
+Form.propTypes = {
+    saveExpense: PropTypes.func.isRequired, 
+    saveCreateExpense: PropTypes.func.isRequired
 }
  
 export default Form;
